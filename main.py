@@ -15,6 +15,7 @@ clear()
 
 def readConfig():
       global stockNames, data
+      stockNames=[]
       read = open("stock-view.txt", "r+")
       data = read.readlines()
       for z in range(0,len(data)):
@@ -23,6 +24,7 @@ def readConfig():
             stockNames.append(data[z])
 def getStockValue():
       global stockValues, stockNames
+      stockValues = []
       try:
             for i in stockNames:
                   stock = requests.get("https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol="+i+"&interval=5min&apikey=7S476M9A5A4CILSN").json()
@@ -45,13 +47,11 @@ def getStockValue():
       
 def calculateChange():
       global stockValues, stockOld, stockChange
+      stockChange=[]
       for x in stockValues:
-            
             y=stockValues.index(x)
-            stockChange=[]
-            print (type((x)))
-            print (type(stockOld[y]))
-            stockChange.append((float(x))/(float(stockOld[y])))
+
+            stockChange.append(((float(x))-(float(stockOld[y])))/(float(stockOld[y])))
       
 def printStockValue():
       global stockOld
@@ -61,8 +61,8 @@ def printStockValue():
             except IndexError:
                   print(stockNames[x], "-", stockValues[x])
       stockOld = stockValues
-      time.sleep(60)
-      clear()
+      time.sleep(300)
+      os.system('clear')
 
 getStockValue()
 try:
